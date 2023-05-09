@@ -54,11 +54,12 @@ export const Button = styled.button`
 
   cursor: pointer;
 
-  transition: background-color 250ms linear;
+  transition: background-color 250ms linear, transform 250ms linear;
 
   align-self: center;
 
   :hover {
     background-color: #5ab1f8;
+    transform: scale(1.1);
   }
 `;
