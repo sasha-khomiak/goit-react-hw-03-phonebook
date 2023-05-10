@@ -13,12 +13,7 @@ import ContactForm from './ContactForm';
 export class App extends Component {
   //наші стейти
   state = {
-    contacts: [
-      { id: 'id-1', name: 'Oleksandr', number: '459-12-56' },
-      { id: 'id-2', name: 'Inna', number: '443-89-12' },
-      { id: 'id-3', name: 'Max', number: '645-17-79' },
-      { id: 'id-4', name: 'Helga', number: '227-91-26' },
-    ],
+    contacts: [],
     filter: '',
     name: '',
     number: '',
@@ -77,6 +72,26 @@ export class App extends Component {
         .includes(this.state.filter.toLocaleLowerCase().trim())
     );
   };
+
+  // коли компонент замоунтився - створився
+  // підтягуємо стейт з localStorage,парсимо, але перевіряємо, якщо приходить нулл
+  // то в стейт контактс помістимо пустий масив
+  componentDidMount() {
+    let contactsFromStorage = localStorage.getItem('contacts');
+    let parsedContacts = JSON.parse(contactsFromStorage);
+
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  // коли компонент оновився, перевіряємо умову оновлення стейт
+  // і після цього записуємо нове значення в localStorage
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
 
   // рендер розмітки
   render() {
