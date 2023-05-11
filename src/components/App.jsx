@@ -19,6 +19,26 @@ export class App extends Component {
     number: '',
   };
 
+  // коли компонент замоунтився - створився
+  // підтягуємо стейт з localStorage,парсимо, але перевіряємо, якщо приходить нулл
+  // то в стейт контактс помістимо пустий масив
+  componentDidMount() {
+    let contactsFromStorage = localStorage.getItem('contacts');
+    let parsedContacts = JSON.parse(contactsFromStorage);
+    // console.log('parsedContacts', parsedContacts);
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  // коли компонент оновився, перевіряємо умову оновлення стейт
+  // і після цього записуємо нове значення в localStorage
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   // метод, який видаляє наш контакт із стейту
   // в властивості contacts, що є масивом обʼєктів
   // отримавши айді елемента
@@ -72,26 +92,6 @@ export class App extends Component {
         .includes(this.state.filter.toLocaleLowerCase().trim())
     );
   };
-
-  // коли компонент замоунтився - створився
-  // підтягуємо стейт з localStorage,парсимо, але перевіряємо, якщо приходить нулл
-  // то в стейт контактс помістимо пустий масив
-  componentDidMount() {
-    let contactsFromStorage = localStorage.getItem('contacts');
-    let parsedContacts = JSON.parse(contactsFromStorage);
-    // console.log('parsedContacts', parsedContacts);
-    if (parsedContacts) {
-      this.setState({ contacts: parsedContacts });
-    }
-  }
-
-  // коли компонент оновився, перевіряємо умову оновлення стейт
-  // і після цього записуємо нове значення в localStorage
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.contacts !== prevState.contacts) {
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-    }
-  }
 
   // рендер розмітки
   render() {
